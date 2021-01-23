@@ -1,0 +1,19 @@
+﻿@using Darkrell.Pro.Blazor.Extensions
+@page "/delayed-element-reference"
+
+@using Example.Data
+@inject WeatherForecastService ForecastService
+
+<div @ref="_div.Ref">
+    delayed element reference 
+</div>
+@code{
+    OnStockedRef _div = new();
+    [Inject] public IJSRuntime jSRuntime { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        await jSRuntime.InvokeVoidAsync("console.log", _div.Ref.Id);
+        _div.OnAvailable(e => jSRuntime.InvokeVoidAsync("console.log", e.Id));
+        await base.OnInitializedAsync();
+    }
+}
