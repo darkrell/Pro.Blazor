@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>Darkrell.Pro.Blazor</Title>
-    <Version>0.0.1-alfa</Version>
+    <Version>0.0.2-alfa</Version>
     <Authors>Darkrell</Authors>
     <Company>Darkrell</Company>
     <Product>Blazor extensions</Product>
@@ -14,6 +14,7 @@
     <RepositoryUrl>https://github.com/darkrell/Pro.Blazor</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>Blazor</PackageTags>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   
@@ -27,6 +28,13 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
