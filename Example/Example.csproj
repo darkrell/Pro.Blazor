@@ -9,4 +9,8 @@
     <ProjectReference Include="..\Darkrell.Pro.Blazor\Darkrell.Pro.Blazor.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\" />
+  </ItemGroup>
+
 </Project>
