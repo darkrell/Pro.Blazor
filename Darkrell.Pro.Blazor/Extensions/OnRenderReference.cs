@@ -8,52 +8,65 @@ namespace Darkrell.Pro.Blazor.Extensions;
 public abstract class OnRenderReference<T>
 {
     private T _ref;
-    private bool isInitialized;
-    private ConcurrentQueue<Func<T, Task>> delayedAsyncActions = new();
+    private bool _isInitialized;
+    private ConcurrentQueue<Func<T, Task>> _delayedAsyncActions = new();
+    private TaskCompletionSource _pipeTask = new TaskCompletionSource();
 
     public T Ref { get => _ref; set => Set(value); }
     private void Set(T value)
     {
         _ref = value;
-        isInitialized = true;
+        _isInitialized = true;
         var taskQueue = Task.CompletedTask;
-        while (delayedAsyncActions.TryDequeue(out var action))
+        while (_delayedAsyncActions.TryDequeue(out var action))
             taskQueue = taskQueue.ContinueWith(_ => action(_ref)).Unwrap();
+        Task.Run(() =>
+        {
+            Task.WaitAny(taskQueue);
+            if (taskQueue.IsCompletedSuccessfully)
+            {
+                _pipeTask.SetResult();
+                return;
+            }
+            _pipeTask.SetException(taskQueue.Exception);
+        });
     }
     public OnRenderReference<T> OnAvailable(Action<T> action)
     {
-        if (isInitialized)
+        if (_isInitialized)
             action(_ref);
         else
-            delayedAsyncActions.Enqueue(e => { action(e); return Task.CompletedTask; });
+            _delayedAsyncActions.Enqueue(e => { action(e); return Task.CompletedTask; });
         return this;
     }
     public OnRenderReference<T> OnAvailable(Func<T, Task> action)
     {
-        if (isInitialized)
+        if (_isInitialized)
             action(_ref);
         else
-            delayedAsyncActions.Enqueue(action);
+            _delayedAsyncActions.Enqueue(action);
         return this;
     }
     public OnRenderReference<T> OnAvailable(Func<T, ValueTask> action)
     {
-        if (isInitialized)
+        if (_isInitialized)
             action(_ref);
         else
-            delayedAsyncActions.Enqueue(e => action(e).AsTask());
+            _delayedAsyncActions.Enqueue(e => action(e).AsTask());
         return this;
     }
     public Task<T2> OnAvailablePipe<T2>(Func<T, Task<T2>> func)
     {
-        if (!isInitialized)
+        if (!_isInitialized)
         {
             var tcs = new TaskCompletionSource<T2>();
-            delayedAsyncActions.Enqueue(async e => tcs.SetResult(await func(e)));
+            _delayedAsyncActions.Enqueue(async e => tcs.SetResult(await func(e)));
             return tcs.Task;
         }
         return func(_ref);
     }
+    public System.Runtime.CompilerServices.TaskAwaiter GetAwaiter()
+        => _pipeTask.Task.GetAwaiter();
 }
 public class OnStockedRef : OnRenderReference<ElementReference>
 { }

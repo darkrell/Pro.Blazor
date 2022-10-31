@@ -10,7 +10,7 @@
     protected override async Task OnInitializedAsync()
     {
         await jSRuntime.InvokeVoidAsync("console.log", _div.Ref.Id);
-        _div.OnAvailable(e => jSRuntime.InvokeVoidAsync("console.log", e.Id));
+        await _div.OnAvailable(e => jSRuntime.InvokeVoidAsync("console.log", e.Id));
         await base.OnInitializedAsync();
     }
 }

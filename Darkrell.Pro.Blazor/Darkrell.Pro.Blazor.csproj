@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>Darkrell.Pro.Blazor</Title>
-    <Version>0.0.2-alfa</Version>
+    <Version>0.0.6-alfa</Version>
     <Authors>Darkrell</Authors>
     <Company>Darkrell</Company>
     <Product>Blazor extensions</Product>
