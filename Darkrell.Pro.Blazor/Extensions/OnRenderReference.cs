@@ -39,7 +39,7 @@ public abstract class OnRenderReference<T>
             _delayedAsyncActions.Enqueue(e => { action(e); return Task.CompletedTask; });
         return this;
     }
-    public OnRenderReference<T> OnAvailable(Func<T, Task> action)
+    public OnRenderReference<T> OnAvailableAsync(Func<T, Task> action)
     {
         if (_isInitialized)
             action(_ref);

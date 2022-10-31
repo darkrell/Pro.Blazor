@@ -8,7 +8,7 @@
     <Authors>Darkrell</Authors>
     <Company>Darkrell</Company>
     <Product>Blazor extensions</Product>
-    <Description>Extentions library for Blazor</Description>
+    <Description>Blazor extension library</Description>
     <Copyright>Darkrell</Copyright>
     <PackageProjectUrl>https://github.com/darkrell/Pro.Blazor</PackageProjectUrl>
     <RepositoryUrl>https://github.com/darkrell/Pro.Blazor</RepositoryUrl>
